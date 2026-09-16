@@ -1,1 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Электронный кейс воспитателя ДОУ</title>
+<meta name="description" content="Методический портфель и нормативная база воспитателя в электронном виде — открывается по QR-коду.">
+<meta name="theme-color" content="#274A2F">
+<meta property="og:title" content="Электронный кейс воспитателя ДОУ">
+<meta property="og:description" content="Вся документация воспитателя в одном месте — планирование, нормативка, методическая копилка, материалы для родителей.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1F3324;
+    --ink-soft:#3E5346;
+    --paper:#F1F0E3;
+    --panel:#FFFFFF;
+    --forest:#35633F;
+    --forest-dark:#274A2F;
+    --honey:#CE9A3A;
+    --indigo:#3E5C82;
+    --brick:#B15A44;
+    --moss:#4F7965;
+    --plum:#7C5273;
+    --line:rgba(31,51,36,0.14);
+    --shadow: 0 1px 2px rgba(31,51,36,0.06), 0 10px 24px -14px rgba(31,51,36,0.22);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Manrope',system-ui,sans-serif;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  h2{font-weight:700;}
+  h3{font-weight:700;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  /* skip link / focus */
+  a:focus-visible, button:focus-visible{
+    outline:2.5px solid var(--forest-dark);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ===== HERO — обложка кейса ===== */
+  .cover{
+    position:relative;
+    background:
+      radial-gradient(1100px 480px at 84% -10%, rgba(255,255,255,0.08), transparent 60%),
+      linear-gradient(165deg, var(--forest) 0%, var(--forest-dark) 78%);
+    color:#F4F3E8;
+    padding:48px 0 40px;
+    overflow:hidden;
+  }
+  .cover::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 84px);
+    pointer-events:none;
+  }
+
+  .cover h1{
+    font-size:clamp(30px,6vw,44px);
+    line-height:1.08;
+    max-width:13ch;
+    opacity:0;
+    animation: rise 0.7s ease-out 0.1s forwards;
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .qr-block{
+    margin-top:30px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    opacity:0;
+    animation: rise 0.7s ease-out 0.24s forwards;
+  }
+  .qr-plate{
+    background:#F4F3E8;
+    border-radius:16px;
+    padding:10px;
+    box-shadow:var(--shadow);
+    flex:none;
+    line-height:0;
+  }
+  .qr-plate svg{width:132px;height:132px;display:block;border-radius:6px;}
+  .qr-caption b{
+    display:block;
+    font-size:15px;
+    font-weight:700;
+    color:#fff;
+  }
+  .qr-caption span{
+    display:block;
+    margin-top:3px;
+    font-size:13px;
+    color:rgba(244,243,232,0.78);
+    max-width:26ch;
+  }
+
+  /* ===== FILTER TABS ===== */
+  .tabs-bar{
+    position:sticky; top:0; z-index:20;
+    background:rgba(241,240,227,0.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    padding:14px 0;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:none;
+    border:1.5px solid var(--line);
+    background:var(--panel);
+    color:var(--ink-soft);
+    font:inherit;
+    font-weight:700;
+    font-size:13.5px;
+    padding:9px 15px;
+    border-radius:100px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    transition:background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease;
+  }
+  .tab:hover{transform:translateY(-1px);}
+  .tab .sw{width:8px;height:8px;border-radius:50%;background:var(--tab-color,var(--forest));flex:none;}
+  .tab[aria-pressed="true"]{
+    background:var(--tab-color,var(--forest));
+    border-color:var(--tab-color,var(--forest));
+    color:#fff;
+  }
+  .tab[aria-pressed="true"] .sw{background:#fff;}
+
+  /* ===== SECTION GROUPS ===== */
+  main{padding:44px 0 10px;}
+  .group{margin-bottom:34px;}
+  .group.is-hidden{display:none;}
+
+  .group-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 18px;
+    border-radius:14px;
+    color:#fff;
+    background:var(--g-color,var(--forest));
+    margin-bottom:16px;
+  }
+  .group-head .num{
+    font-family:'Manrope',sans-serif;
+    font-weight:800;
+    font-size:20px;
+    opacity:0.75;
+  }
+  .group-head h2{font-size:19px; color:#fff;}
+  .group-head p{
+    margin:2px 0 0;
+    font-size:13px;
+    color:rgba(255,255,255,0.82);
+  }
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+  }
+  @media (max-width:640px){
+    .cards{grid-template-columns:1fr;}
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:4px solid var(--c-color,var(--forest));
+    border-radius:12px;
+    padding:16px 16px 15px;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-2px);}
+  .card-top{display:flex; align-items:flex-start; gap:11px;}
+  .card-icon{font-size:21px; line-height:1; flex:none; margin-top:1px;}
+  .card h3{font-size:15.5px; font-weight:600; line-height:1.28;}
+  .card p{
+    margin:7px 0 0;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    line-height:1.45;
+  }
+  .card .open{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:12px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--c-color,var(--forest));
+    text-decoration:none;
+  }
+  .card .open:hover{text-decoration:underline;}
+
+  /* ===== HOW TO USE ===== */
+  .howto{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 22px;
+    margin:44px 0 28px;
+  }
+  .howto h2{font-size:19px; margin-bottom:16px;}
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  @media (max-width:640px){.steps{grid-template-columns:1fr;}}
+  .step{display:flex; gap:11px; align-items:flex-start;}
+  .step .n{
+    flex:none;
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:800; color:var(--forest-dark);
+  }
+  .step p{margin:0; font-size:13.5px; color:var(--ink-soft);}
+  .step b{display:block; font-size:14px; color:var(--ink); margin-bottom:2px;}
+
+  footer{
+    padding:22px 0 40px;
+    border-top:1px solid var(--line);
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  @media print{
+    .tabs-bar{position:static;}
+    .cover::after{display:none;}
+    .card:hover, .tab:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <h1>Кейс воспитателя ДОУ</h1>
+
+    <div class="qr-block">
+      <div class="qr-plate"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164 164" width="132" height="132" shape-rendering="crispEdges" role="img" aria-label="QR-код: ссылка на страницу кейса"><rect width="164" height="164" fill="#F4F3E8"/><g fill="#274A2F"><rect x="16" y="16" width="28" height="4"/><rect x="56" y="16" width="12" height="4"/><rect x="72" y="16" width="4" height="4"/><rect x="80" y="16" width="4" height="4"/><rect x="100" y="16" width="4" height="4"/><rect x="120" y="16" width="28" height="4"/><rect x="16" y="20" width="4" height="4"/><rect x="40" y="20" width="4" height="4"/><rect x="64" y="20" width="4" height="4"/><rect x="88" y="20" width="8" height="4"/><rect x="104" y="20" width="4" height="4"/><rect x="112" y="20" width="4" height="4"/><rect x="120" y="20" width="4" height="4"/><rect x="144" y="20" width="4" height="4"/><rect x="16" y="24" width="4" height="4"/><rect x="24" y="24" width="12" height="4"/><rect x="40" y="24" width="4" height="4"/><rect x="48" y="24" width="8" height="4"/><rect x="64" y="24" width="4" height="4"/><rect x="72" y="24" width="4" height="4"/><rect x="92" y="24" width="8" height="4"/><rect x="120" y="24" width="4" height="4"/><rect x="128" y="24" width="12" height="4"/><rect x="144" y="24" width="4" height="4"/><rect x="16" y="28" width="4" height="4"/><rect x="24" y="28" width="12" height="4"/><rect x="40" y="28" width="4" height="4"/><rect x="48" y="28" width="12" height="4"/><rect x="76" y="28" width="4" height="4"/><rect x="88" y="28" width="4" height="4"/><rect x="100" y="28" width="8" height="4"/><rect x="120" y="28" width="4" height="4"/><rect x="128" y="28" width="12" height="4"/><rect x="144" y="28" width="4" height="4"/><rect x="16" y="32" width="4" height="4"/><rect x="24" y="32" width="12" height="4"/><rect x="40" y="32" width="4" height="4"/><rect x="48" y="32" width="4" height="4"/><rect x="60" y="32" width="8" height="4"/><rect x="72" y="32" width="12" height="4"/><rect x="96" y="32" width="8" height="4"/><rect x="120" y="32" width="4" height="4"/><rect x="128" y="32" width="12" height="4"/><rect x="144" y="32" width="4" height="4"/><rect x="16" y="36" width="4" height="4"/><rect x="40" y="36" width="4" height="4"/><rect x="48" y="36" width="12" height="4"/><rect x="68" y="36" width="4" height="4"/><rect x="84" y="36" width="4" height="4"/><rect x="92" y="36" width="4" height="4"/><rect x="112" y="36" width="4" height="4"/><rect x="120" y="36" width="4" height="4"/><rect x="144" y="36" width="4" height="4"/><rect x="16" y="40" width="28" height="4"/><rect x="48" y="40" width="4" height="4"/><rect x="56" y="40" width="4" height="4"/><rect x="64" y="40" width="4" height="4"/><rect x="72" y="40" width="4" height="4"/><rect x="80" y="40" width="4" height="4"/><rect x="88" y="40" width="4" height="4"/><rect x="96" y="40" width="4" height="4"/><rect x="104" y="40" width="4" height="4"/><rect x="112" y="40" width="4" height="4"/><rect x="120" y="40" width="28" height="4"/><rect x="48" y="44" width="12" height="4"/><rect x="68" y="44" width="4" height="4"/><rect x="80" y="44" width="4" height="4"/><rect x="92" y="44" width="12" height="4"/><rect x="108" y="44" width="4" height="4"/><rect x="16" y="48" width="4" height="4"/><rect x="24" y="48" width="20" height="4"/><rect x="52" y="48" width="8" height="4"/><rect x="72" y="48" width="4" height="4"/><rect x="80" y="48" width="4" height="4"/><rect x="92" y="48" width="8" height="4"/><rect x="120" y="48" width="20" height="4"/><rect x="20" y="52" width="4" height="4"/><rect x="36" y="52" width="4" height="4"/><rect x="48" y="52" width="8" height="4"/><rect x="60" y="52" width="4" height="4"/><rect x="68" y="52" width="8" height="4"/><rect x="80" y="52" width="24" height="4"/><rect x="108" y="52" width="4" height="4"/><rect x="120" y="52" width="8" height="4"/><rect x="132" y="52" width="12" height="4"/><rect x="16" y="56" width="4" height="4"/><rect x="24" y="56" width="8" height="4"/><rect x="36" y="56" width="16" height="4"/><rect x="56" y="56" width="8" height="4"/><rect x="68" y="56" width="8" height="4"/><rect x="84" y="56" width="4" height="4"/><rect x="104" y="56" width="4" height="4"/><rect x="116" y="56" width="4" height="4"/><rect x="128" y="56" width="4" height="4"/><rect x="136" y="56" width="4" height="4"/><rect x="144" y="56" width="4" height="4"/><rect x="20" y="60" width="8" height="4"/><rect x="36" y="60" width="4" height="4"/><rect x="48" y="60" width="4" height="4"/><rect x="56" y="60" width="8" height="4"/><rect x="68" y="60" width="4" height="4"/><rect x="80" y="60" width="20" height="4"/><rect x="104" y="60" width="4" height="4"/><rect x="112" y="60" width="12" height="4"/><rect x="128" y="60" width="12" height="4"/><rect x="144" y="60" width="4" height="4"/><rect x="20" y="64" width="4" height="4"/><rect x="32" y="64" width="4" height="4"/><rect x="40" y="64" width="12" height="4"/><rect x="64" y="64" width="4" height="4"/><rect x="72" y="64" width="12" height="4"/><rect x="96" y="64" width="8" height="4"/><rect x="112" y="64" width="4" height="4"/><rect x="128" y="64" width="8" height="4"/><rect x="140" y="64" width="4" height="4"/><rect x="16" y="68" width="4" height="4"/><rect x="24" y="68" width="4" height="4"/><rect x="36" y="68" width="4" height="4"/><rect x="56" y="68" width="8" height="4"/><rect x="76" y="68" width="4" height="4"/><rect x="88" y="68" width="4" height="4"/><rect x="100" y="68" width="8" height="4"/><rect x="124" y="68" width="4" height="4"/><rect x="132" y="68" width="16" height="4"/><rect x="16" y="72" width="4" height="4"/><rect x="24" y="72" width="4" height="4"/><rect x="40" y="72" width="4" height="4"/><rect x="48" y="72" width="20" height="4"/><rect x="72" y="72" width="16" height="4"/><rect x="96" y="72" width="4" height="4"/><rect x="116" y="72" width="8" height="4"/><rect x="128" y="72" width="8" height="4"/><rect x="140" y="72" width="4" height="4"/><rect x="20" y="76" width="16" height="4"/><rect x="44" y="76" width="4" height="4"/><rect x="52" y="76" width="8" height="4"/><rect x="72" y="76" width="8" height="4"/><rect x="84" y="76" width="8" height="4"/><rect x="100" y="76" width="12" height="4"/><rect x="116" y="76" width="8" height="4"/><rect x="136" y="76" width="4" height="4"/><rect x="20" y="80" width="12" height="4"/><rect x="40" y="80" width="4" height="4"/><rect x="56" y="80" width="4" height="4"/><rect x="76" y="80" width="8" height="4"/><rect x="88" y="80" width="4" height="4"/><rect x="112" y="80" width="8" height="4"/><rect x="124" y="80" width="12" height="4"/><rect x="144" y="80" width="4" height="4"/><rect x="16" y="84" width="4" height="4"/><rect x="28" y="84" width="4" height="4"/><rect x="48" y="84" width="4" height="4"/><rect x="60" y="84" width="12" height="4"/><rect x="76" y="84" width="4" height="4"/><rect x="88" y="84" width="16" height="4"/><rect x="108" y="84" width="4" height="4"/><rect x="120" y="84" width="8" height="4"/><rect x="132" y="84" width="12" height="4"/><rect x="16" y="88" width="12" height="4"/><rect x="36" y="88" width="12" height="4"/><rect x="72" y="88" width="4" height="4"/><rect x="88" y="88" width="8" height="4"/><rect x="104" y="88" width="4" height="4"/><rect x="112" y="88" width="8" height="4"/><rect x="124" y="88" width="8" height="4"/><rect x="136" y="88" width="8" height="4"/><rect x="20" y="92" width="12" height="4"/><rect x="36" y="92" width="4" height="4"/><rect x="56" y="92" width="4" height="4"/><rect x="72" y="92" width="4" height="4"/><rect x="80" y="92" width="4" height="4"/><rect x="92" y="92" width="4" height="4"/><rect x="100" y="92" width="4" height="4"/><rect x="108" y="92" width="8" height="4"/><rect x="120" y="92" width="20" height="4"/><rect x="144" y="92" width="4" height="4"/><rect x="20" y="96" width="12" height="4"/><rect x="40" y="96" width="4" height="4"/><rect x="48" y="96" width="16" height="4"/><rect x="68" y="96" width="12" height="4"/><rect x="88" y="96" width="4" height="4"/><rect x="100" y="96" width="4" height="4"/><rect x="120" y="96" width="4" height="4"/><rect x="128" y="96" width="8" height="4"/><rect x="140" y="96" width="4" height="4"/><rect x="16" y="100" width="4" height="4"/><rect x="24" y="100" width="16" height="4"/><rect x="44" y="100" width="4" height="4"/><rect x="56" y="100" width="4" height="4"/><rect x="76" y="100" width="8" height="4"/><rect x="96" y="100" width="12" height="4"/><rect x="112" y="100" width="8" height="4"/><rect x="128" y="100" width="4" height="4"/><rect x="136" y="100" width="4" height="4"/><rect x="144" y="100" width="4" height="4"/><rect x="16" y="104" width="4" height="4"/><rect x="32" y="104" width="4" height="4"/><rect x="40" y="104" width="4" height="4"/><rect x="60" y="104" width="4" height="4"/><rect x="68" y="104" width="8" height="4"/><rect x="84" y="104" width="4" height="4"/><rect x="92" y="104" width="4" height="4"/><rect x="112" y="104" width="20" height="4"/><rect x="140" y="104" width="4" height="4"/><rect x="16" y="108" width="4" height="4"/><rect x="24" y="108" width="4" height="4"/><rect x="44" y="108" width="4" height="4"/><rect x="52" y="108" width="20" height="4"/><rect x="80" y="108" width="4" height="4"/><rect x="92" y="108" width="20" height="4"/><rect x="116" y="108" width="4" height="4"/><rect x="132" y="108" width="4" height="4"/><rect x="140" y="108" width="4" height="4"/><rect x="16" y="112" width="4" height="4"/><rect x="24" y="112" width="8" height="4"/><rect x="40" y="112" width="8" height="4"/><rect x="56" y="112" width="8" height="4"/><rect x="68" y="112" width="8" height="4"/><rect x="92" y="112" width="4" height="4"/><rect x="112" y="112" width="36" height="4"/><rect x="48" y="116" width="4" height="4"/><rect x="72" y="116" width="4" height="4"/><rect x="80" y="116" width="8" height="4"/><rect x="92" y="116" width="4" height="4"/><rect x="100" y="116" width="4" height="4"/><rect x="108" y="116" width="8" height="4"/><rect x="128" y="116" width="4" height="4"/><rect x="136" y="116" width="12" height="4"/><rect x="16" y="120" width="28" height="4"/><rect x="60" y="120" width="16" height="4"/><rect x="84" y="120" width="4" height="4"/><rect x="96" y="120" width="4" height="4"/><rect x="108" y="120" width="8" height="4"/><rect x="120" y="120" width="4" height="4"/><rect x="128" y="120" width="4" height="4"/><rect x="136" y="120" width="4" height="4"/><rect x="144" y="120" width="4" height="4"/><rect x="16" y="124" width="4" height="4"/><rect x="40" y="124" width="4" height="4"/><rect x="48" y="124" width="8" height="4"/><rect x="60" y="124" width="4" height="4"/><rect x="68" y="124" width="4" height="4"/><rect x="84" y="124" width="12" height="4"/><rect x="108" y="124" width="8" height="4"/><rect x="128" y="124" width="12" height="4"/><rect x="144" y="124" width="4" height="4"/><rect x="16" y="128" width="4" height="4"/><rect x="24" y="128" width="12" height="4"/><rect x="40" y="128" width="4" height="4"/><rect x="48" y="128" width="4" height="4"/><rect x="56" y="128" width="8" height="4"/><rect x="76" y="128" width="8" height="4"/><rect x="104" y="128" width="4" height="4"/><rect x="112" y="128" width="24" height="4"/><rect x="140" y="128" width="4" height="4"/><rect x="16" y="132" width="4" height="4"/><rect x="24" y="132" width="12" height="4"/><rect x="40" y="132" width="4" height="4"/><rect x="48" y="132" width="8" height="4"/><rect x="60" y="132" width="4" height="4"/><rect x="72" y="132" width="8" height="4"/><rect x="88" y="132" width="4" height="4"/><rect x="100" y="132" width="20" height="4"/><rect x="128" y="132" width="12" height="4"/><rect x="16" y="136" width="4" height="4"/><rect x="24" y="136" width="12" height="4"/><rect x="40" y="136" width="4" height="4"/><rect x="48" y="136" width="16" height="4"/><rect x="68" y="136" width="20" height="4"/><rect x="108" y="136" width="20" height="4"/><rect x="132" y="136" width="4" height="4"/><rect x="16" y="140" width="4" height="4"/><rect x="40" y="140" width="4" height="4"/><rect x="56" y="140" width="12" height="4"/><rect x="72" y="140" width="8" height="4"/><rect x="88" y="140" width="4" height="4"/><rect x="100" y="140" width="8" height="4"/><rect x="112" y="140" width="8" height="4"/><rect x="128" y="140" width="12" height="4"/><rect x="16" y="144" width="28" height="4"/><rect x="48" y="144" width="12" height="4"/><rect x="64" y="144" width="4" height="4"/><rect x="76" y="144" width="4" height="4"/><rect x="84" y="144" width="8" height="4"/><rect x="100" y="144" width="4" height="4"/><rect x="108" y="144" width="20" height="4"/><rect x="140" y="144" width="4" height="4"/></g></svg></div>
+      <div class="qr-caption">
+        <b>Сканируйте камерой</b>
+        <span>QR-код открывает эту страницу</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs-bar" aria-label="Фильтр разделов">
+  <div class="wrap">
+    <div class="tabs" id="tabs">
+      <button class="tab" data-filter="all" aria-pressed="true" style="--tab-color:#274A2F"><span class="sw"></span>Все материалы</button>
+      <button class="tab" data-filter="norm" aria-pressed="false" style="--tab-color:#3E5C82"><span class="sw"></span>Нормативка</button>
+      <button class="tab" data-filter="plan" aria-pressed="false" style="--tab-color:#CE9A3A"><span class="sw"></span>Планирование</button>
+      <button class="tab" data-filter="metod" aria-pressed="false" style="--tab-color:#4F7965"><span class="sw"></span>Копилка</button>
+      <button class="tab" data-filter="parents" aria-pressed="false" style="--tab-color:#7C5273"><span class="sw"></span>Родителям</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- Группа 1 — Нормативная база -->
+  <section class="group" data-group="norm">
+    <div class="group-head" style="--g-color:#3E5C82">
+      <span class="num">01</span>
+      <div>
+        <h2>Нормативная база</h2>
+        <p>Документы, на которые опирается работа воспитателя</p>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="card" style="--c-color:#3E5C82">
+        <div class="card-top"><span class="card-icon">📘</span><h3>ФГОС ДО и ФОП ДО</h3></div>
+        <p>Федеральный государственный стандарт и федеральная образовательная программа дошкольного образования.</p>
+        <a class="open" href="#" data-doc="fgos" target="_blank" rel="noopener">Открыть файлы ↗</a>
+      </article>
+      <article class="card" style="--c-color:#3E5C82">
+        <div class="card-top"><span class="card-icon">📜</span><h3>Локальные акты ДОУ</h3></div>
+        <p>Устав, правила внутреннего распорядка, должностная инструкция воспитателя.</p>
+        <a class="open" href="#" data-doc="local-acts" target="_blank" rel="noopener">Открыть файлы ↗</a>
+      </article>
+      <article class="card" style="--c-color:#3E5C82">
+        <div class="card-top"><span class="card-icon">🛡️</span><h3>Охрана труда и ТБ</h3></div>
+        <p>Инструкции по охране жизни и здоровья воспитанников, пожарная безопасность.</p>
+        <a class="open" href="#" data-doc="safety" target="_blank" rel="noopener">Открыть файлы ↗</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Группа 2 — Планирование -->
+  <section class="group" data-group="plan">
+    <div class="group-head" style="--g-color:#CE9A3A">
+      <span class="num">02</span>
+      <div>
+        <h2>Планирование</h2>
+        <p>Как строится день и неделя в группе</p>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="card" style="--c-color:#CE9A3A">
+        <div class="card-top"><span class="card-icon">📆</span><h3>Календарное планирование</h3></div>
+        <p>Планы воспитательно-образовательной работы по неделям и темам.</p>
+        <a class="open" href="#" data-doc="calendar-plan" target="_blank" rel="noopener">Смотреть планы ↗</a>
+      </article>
+      <article class="card" style="--c-color:#CE9A3A">
+        <div class="card-top"><span class="card-icon">⏰</span><h3>Режим дня и сетка занятий</h3></div>
+        <p>Расписание организованной деятельности и циклограмма воспитателя.</p>
+        <a class="open" href="#" data-doc="schedule" target="_blank" rel="noopener">Смотреть сетку ↗</a>
+      </article>
+      <article class="card" style="--c-color:#CE9A3A">
+        <div class="card-top"><span class="card-icon">📈</span><h3>Педагогический мониторинг</h3></div>
+        <p>Карты развития детей, сводные таблицы, динамика освоения программы.</p>
+        <a class="open" href="#" data-doc="monitoring" target="_blank" rel="noopener">Открыть карты ↗</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Группа 3 — Методическая копилка -->
+  <section class="group" data-group="metod">
+    <div class="group-head" style="--g-color:#4F7965">
+      <span class="num">03</span>
+      <div>
+        <h2>Методическая копилка</h2>
+        <p>Готовые материалы для занятий и проектов</p>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="card" style="--c-color:#4F7965">
+        <div class="card-top"><span class="card-icon">💡</span><h3>Конспекты занятий</h3></div>
+        <p>Картотека открытых и календарных занятий по всем пяти образовательным областям.</p>
+        <a class="open" href="#" data-doc="lessons" target="_blank" rel="noopener">Открыть картотеку ↗</a>
+      </article>
+      <article class="card" style="--c-color:#4F7965">
+        <div class="card-top"><span class="card-icon">🎮</span><h3>Картотеки игр</h3></div>
+        <p>Подвижные, сюжетно-ролевые, дидактические и пальчиковые игры.</p>
+        <a class="open" href="#" data-doc="games" target="_blank" rel="noopener">Открыть картотеку ↗</a>
+      </article>
+      <article class="card" style="--c-color:#4F7965">
+        <div class="card-top"><span class="card-icon">🚀</span><h3>Проекты и инклюзия</h3></div>
+        <p>Паспорта проектов и индивидуальные маршруты для детей с ОВЗ.</p>
+        <a class="open" href="#" data-doc="projects" target="_blank" rel="noopener">Смотреть проекты ↗</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Группа 4 — Родителям -->
+  <section class="group" data-group="parents">
+    <div class="group-head" style="--g-color:#7C5273">
+      <span class="num">04</span>
+      <div>
+        <h2>Работа с родителями</h2>
+        <p>Протоколы и материалы для родительского уголка</p>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="card" style="--c-color:#7C5273">
+        <div class="card-top"><span class="card-icon">📝</span><h3>Протоколы собраний</h3></div>
+        <p>Протоколы родительских собраний, листы явки, принятые решения.</p>
+        <a class="open" href="#" data-doc="minutes" target="_blank" rel="noopener">Открыть архив ↗</a>
+      </article>
+      <article class="card" style="--c-color:#7C5273">
+        <div class="card-top"><span class="card-icon">📌</span><h3>Наглядные консультации</h3></div>
+        <p>Папки-передвижки, памятки и буклеты для родительского уголка.</p>
+        <a class="open" href="#" data-doc="parent-info" target="_blank" rel="noopener">Перейти к папкам ↗</a>
+      </article>
+    </div>
+  </section>
+
+  <div class="howto">
+    <h2>Как пользоваться кейсом</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="n">1</span>
+        <p><b>Отсканируйте QR</b>Наведите камеру телефона на код — страница откроется в браузере.</p>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <p><b>Выберите раздел</b>Нажмите на нужную вкладку вверху, чтобы отфильтровать материалы.</p>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <p><b>Откройте файлы</b>Ссылка на карточке ведёт в папку с документами на Google Диске.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Электронный методический кейс воспитателя ДОУ · обновляется по мере необходимости
+</footer>
+
+<script>
+  // ===================================================================
+  // ССЫЛКИ НА ФАЙЛЫ — впишите сюда реальные ссылки (Google Диск / Яндекс Диск)
+  // Ничего больше в коде менять не нужно — просто замените "#" на вашу ссылку.
+  // ===================================================================
+  const DOC_LINKS = {
+    "fgos":          "#",
+    "local-acts":    "#",
+    "safety":        "#",
+    "calendar-plan": "#",
+    "schedule":      "#",
+    "monitoring":    "#",
+    "lessons":       "#",
+    "games":         "#",
+    "projects":      "#",
+    "minutes":       "#",
+    "parent-info":   "#"
+  };
+  document.querySelectorAll("[data-doc]").forEach(function(el){
+    const url = DOC_LINKS[el.dataset.doc];
+    if (url && url !== "#") el.setAttribute("href", url);
+  });
+
+  // ===================================================================
+  // Фильтр по разделам
+  // ===================================================================
+  const tabs = document.querySelectorAll(".tab");
+  const groups = document.querySelectorAll(".group");
+
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      const filter = tab.dataset.filter;
+      tabs.forEach(t => t.setAttribute("aria-pressed", t === tab ? "true" : "false"));
+
+      groups.forEach(function(g){
+        const show = filter === "all" || g.dataset.group === filter;
+        if (show){
+          g.classList.remove("is-hidden");
+          g.style.opacity = 0;
+          requestAnimationFrame(() => {
+            g.style.transition = "opacity .28s ease";
+            g.style.opacity = 1;
+          });
+        } else {
+          g.style.transition = "opacity .15s ease";
+          g.style.opacity = 0;
+          setTimeout(() => g.classList.add("is-hidden"), 150);
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
 
